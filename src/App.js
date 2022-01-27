@@ -8,37 +8,57 @@ import "./styles/Box.css";
 import Counter from "./components/Counter.js";
 import UserInfo from "./components/Userinfo.js";
 
-// USERLIST
-const userList = users.map((data) => {
-  return (
-    <UserInfo name={data.name} email={data.email} website={data.website} />
-  );
-});
-
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
       count: 1,
+      arrayLength: 0,
     };
+
+    this.addCount = this.addCount.bind(this);
+    this.removeCount = this.removeCount.bind(this);
   }
 
   addCount = () => {
-    if (this.state.count >= 1 && this.state.count <= 9)
+    if (this.state.count >= 0 && this.state.count <= 9) {
+      users.push(users[this.state.arrayLength]);
       this.setState({
         count: this.state.count + 1,
+        arrayLength: this.state.count,
       });
+    }
+    console.log(this.state.arrayLength);
   };
 
   removeCount = () => {
-    if (this.state.count >= 2 && this.state.count <= 10)
+    if (this.state.count >= 1 && this.state.count <= 10) {
+      users.pop();
       this.setState({
         count: this.state.count - 1,
+        arrayLength: this.state.count,
       });
+    }
+    console.log(this.state.arrayLength);
   };
 
   render() {
+    const userNumber = this.state.count;
+
+    // USERLIST
+    let userList = users.map((data, i) => {
+      if (i < userNumber) {
+        return (
+          <UserInfo
+            name={data.name}
+            email={data.email}
+            website={data.website}
+          />
+        );
+      }
+    });
+
     return (
       <div>
         <Counter
@@ -46,7 +66,7 @@ class App extends React.Component {
           addCount={this.addCount}
           removeCount={this.removeCount}
         />
-        <div>{userList}</div>;
+        <p>{userList}</p>
       </div>
     );
   }
